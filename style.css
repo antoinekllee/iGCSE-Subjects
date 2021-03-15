@@ -1,0 +1,160 @@
+body
+{
+  font-family: 'Roboto', sans-serif; 
+  margin: 80px; 
+  background-color: white; 
+}
+
+hr
+{
+	border: none;
+	height: 2px;
+    background-color: #4a4e4d; 
+}
+
+h1
+{
+    text-align: center;
+    color: #0e9aa7; 
+    font-size: 50px;
+}
+
+h2, h3
+{
+    text-align: center;
+    font-size: 30px;
+    color: #3da4ab; 
+}
+
+strong 
+{ 
+    font-weight: bold; 
+}
+
+#queryText::after
+{
+	content: '';
+    background: #3da4ab; 
+	display: block; 
+	height: 3px; 
+	width: 170px;
+	margin: 20px auto 5px;
+}
+
+/* #subjectDropdown, #submitSubject */
+button, select
+{
+  height: 60px;  
+  border-radius: 10px;
+  font-size: 24px;
+  background-color: #e9e9e9;
+  border: none;
+  margin: 2px;
+}
+
+#subjectDropdown
+{
+    width: 40%; 
+    padding: 12px 20px 12px 20px; 
+}
+
+#submitSubject
+{
+    width: 20%; 
+}
+
+.verificationCatagoryText, .verificationText, .changeButton
+{
+    display: inline-block;
+    position: relative;
+}
+
+.verificationCatagoryText
+{
+    right: 10%; 
+    text-align: right;
+}
+
+.changeButton
+{
+    left: 10%;
+    /* text-align: center; */
+}
+
+.verificationBreakline
+{
+    /* display: block;
+    margin: 1px 0; */
+    /* line-height:-2000px; */
+    display: block; 
+    margin-bottom: 0em;  
+
+}
+
+.changeButton
+{
+    left: 20%; 
+    text-align: center;
+    height: 50px;
+    width: 110px;
+}
+
+#verifyButton
+{
+    width: 120px;
+}
+
+.card
+{
+    padding-top: 20px;
+    padding-bottom: 50px;
+    text-align: center;
+    border-radius: 15px;
+    background-color: white;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+    transition: 0.3s; 
+}
+
+.card:hover 
+{
+    box-shadow: 0 8px 16px 0 rgba(0, 0, 0, 0.2);
+} 
+
+.fadeIn
+{
+    display: block; 
+    animation: fadeIn 1s;
+    -webkit-animation: fadeIn 1s; 
+    animation-fill-mode: forwards;
+}
+
+@keyframes fadeIn 
+{
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+.fadedIn
+{
+    opacity: 1; 
+    display: block; 
+}
+
+.fadeOut
+{
+    animation: fadeOut 1s;
+    -webkit-animation: fadeOut 1s; 
+    animation-fill-mode: forwards;
+}
+
+@keyframes fadeOut 
+{
+    from { opacity: 1; }
+    to { opacity: 0; }
+}
+
+.fadedOut
+{
+    opacity: 0; 
+    display: none; 
+}
