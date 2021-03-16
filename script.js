@@ -36,28 +36,28 @@ const inputFunctions =
     () => { inputSubject ("other subject", other) }
 ]
 
-const fadeIn = (element) =>
+const fadeIn = (element, blockFadedOut = false) =>
 {
     element.classList.add ("fadeIn"); 
-    element.classList.remove ("fadedOut"); 
+    element.classList.remove (!blockFadedOut ? "fadedOut" : "blockFadedOut"); 
 
     setTimeout(() => 
     {
         element.classList.add ("fadedIn"); 
         element.classList.remove ("fadeIn"); 
-    }, 1000);
+    }, 750);
 }
 
-const fadeOut = (element) =>
+const fadeOut = (element, blockFadedOut = false) =>
 {
     element.classList.add ("fadeOut"); 
     element.classList.remove ("fadedIn"); 
 
     setTimeout(() => 
     {
-        element.classList.add ("fadedOut"); 
+        element.classList.add (!blockFadedOut ? "fadedOut" : "blockFadedOut"); 
         element.classList.remove ("fadeOut"); 
-    }, 1000);
+    }, 750);
 }
 
 const inputSubject = (subjectCatagory, subjectChoices) => 
@@ -89,16 +89,16 @@ const submitSubject = (subjectIndex) =>
     }
     else
     {
-        fadeOut (subjectForm); 
+        fadeOut (subjectForm, true); 
 
         if (!verificationForm.classList.contains ("fadedIn"))
         {
-            setTimeout(() => { fadeIn (verificationForm); }, 1000);
+            setTimeout(() => { fadeIn (verificationForm); }, 750);
             setTimeout(() => 
             {
                 verifyInput(); 
                 finishedInput = true; 
-            }, 1000);
+            }, 750);
         }
         else
             verifyInput (); 
@@ -107,14 +107,22 @@ const submitSubject = (subjectIndex) =>
 
 const verifyInput = () =>
 {
-    verificationForm.innerHTML = `<h3 class="verificationCatagoryText">Language: </h3><h3 class="verificationText">${subjects [0]}</h3>
-                                    <button class="changeButton">Change</button><br class="verificationBreakline">
-                                    <h3 class="verificationCatagoryText">Humanity: </h3><h3 class="verificationText">${subjects [1]}</h3>
-                                    <button class="changeButton">Change</button><br class="verificationBreakline">
-                                    <h3 class="verificationCatagoryText">Art: </h3><h3 class="verificationText">${subjects [2]}</h3>
-                                    <button class="changeButton">Change</button><br class="verificationBreakline">
-                                    <h3 class="verificationCatagoryText">Other: </h3><h3 class="verificationText">${subjects [3]}</h3>
-                                    <button class="changeButton">Change</button><br class="verificationBreakline">
+    verificationForm.innerHTML = `<div class="verificationRow">
+                                        <h3>${subjects[0]}</h3>
+                                        <button class="changeButton">Change</button>
+                                    </div>
+                                    <div class="verificationRow">
+                                        <h3>${subjects [1]}</h3>
+                                        <button class="changeButton">Change</button>
+                                    </div>
+                                    <div class="verificationRow">
+                                        <h3>${subjects [2]}</h3>
+                                        <button class="changeButton">Change</button>
+                                    </div>
+                                    <div class="verificationRow">
+                                        <h3>${subjects [3]}</h3>
+                                        <button class="changeButton">Change</button>
+                                    </div>
                                     <button id="verifyButton">Verify</button>`; 
 
     changeButtons = document.querySelectorAll (".changeButton"); 
@@ -129,7 +137,7 @@ const verifyInput = () =>
 
 const changeSubject = (subjectIndex) =>
 {
-    fadeIn (subjectForm); 
+    fadeIn (subjectForm, true); 
 
     changeSubjectIndex = subjectIndex; 
     inputFunctions [subjectIndex] (); 
@@ -137,11 +145,18 @@ const changeSubject = (subjectIndex) =>
 
 const verifySubjects = () =>
 {
-    if (!subjectForm.classList.contains ("fadedOut"))
+    if (!subjectForm.classList.contains ("fadedOut") && !subjectForm.classList.contains ("blockFadedOut"))
         fadeOut (subjectForm); 
 
     fadeOut (verificationForm); 
-    setTimeout(() => { getAllData (); }, 1000);
+
+    setTimeout(() => 
+    { 
+        subjectForm.classList.add ("fadedOut"); 
+        subjectForm.classList.remove ("blockFadedOut"); 
+
+        getAllData (); 
+    }, 750);
 }
 
 // Async-await function to fetch data from csv
@@ -211,36 +226,36 @@ const getSimilarStudents = () =>
     {
         intersectingSubjects = getArraysIntersection (subjects, data); 
         
-        if (intersectingSubjects.length == 4)
+        if (intersectingSubjects.length == 4) // 4 subjects in common
             sameStudents.push (`<h4>${RemoveEmailDomain(data [1])} from ${data [6]}</h4>`); 
-        else if (intersectingSubjects.length == 3)
+        else if (intersectingSubjects.length == 3) // 3 subjects in common
             similarStudents.push (`<h4>${RemoveEmailDomain(data [1])} from ${data [6]} also takes ${intersectingSubjects [0]}, ${intersectingSubjects [1]}, and ${intersectingSubjects [2]}</h4>`); 
     });
 
     if (sameStudents.length == 0)
-        similarStudentsCard.innerHTML = "<h3>No other students take the exact same subjects as you!</h4>"; 
+        similarStudentsCard.innerHTML = "<h3>No other students take the exact same subjects</h4>"; 
     else
     {
-        similarStudentsCard.innerHTML = '<h3>Other students who take the same subjects as you: </h3>'; 
+        similarStudentsCard.innerHTML = '<h3 class="subtitle">Other students who the same subjects</h3>'; 
         sameStudents.forEach(studentInfo => { similarStudentsCard.innerHTML += studentInfo; });
+        similarStudentsCard.innerHTML += `<h3>${(Math.round((sameStudents.length / studentData.length) * 100) * 10) / 10}% of people chose the exact same subjects</h3>`
     }
 
-    similarStudentsCard.innerHTML += `<h3>${(Math.round((sameStudents.length / studentData.length) * 100) * 10) / 10}% of people chose the exact same subjects as you!</h3>`
     
     if (similarStudents.length >= 1)
     {
-        similarStudentsCard.innerHTML += '<h3>Other students who take similar subjects as you: </h3>'; 
+        similarStudentsCard.innerHTML += '<h3 class="subtitle">Other students who take similar subjects</h3>'; 
         similarStudents.forEach(studentInfo => { similarStudentsCard.innerHTML += studentInfo; });
     }
     
-    similarStudentsCard.innerHTML += `<h3>${(Math.round((similarStudents.length / studentData.length) * 100) * 10) / 10}% of people have 3 subjects in common with you!</h3>`
+    similarStudentsCard.innerHTML += `<h3>${(Math.round((similarStudents.length / studentData.length) * 100) * 10) / 10}% of people have three subjects in common with you</h3>`
 }
 
 // Gets ranking of a particular subject
-// subjectIndex is the index of subject's data inside CSV
 // subjectCatagory is the name of the catagory used for displaying data
 // subjectChoices is the list of all possible choices for a subject
-// displayCard is the div that the info will be displayed on
+// subjectIndex is the index of subject's data subjects
+// csvSubjectIndex is the index of subject's data inside CSV
 const getSubjectInfo = (subjectCatagory, subjectChoices, subjectIndex, csvSubjectIndex) =>
 {
     let popularity = []; 
@@ -261,10 +276,30 @@ const getSubjectInfo = (subjectCatagory, subjectChoices, subjectIndex, csvSubjec
             {
                 popularity.forEach ((element) =>
                 {
-                    if (element [0] == subjectIndex)
+                    if (element [0] == subject)
                         element [1] += studentData.filter((x) => { return x [5] == subject }).length; 
                 })
             }
+        })
+    }
+    else
+    {
+        humanities.forEach ((subject) =>
+        {
+            popularity.forEach ((element) =>
+            {
+                if (element [0] == subject)
+                    element [1] += studentData.filter((x) => { return x [3] == subject }).length; 
+            })
+        })
+
+        arts.forEach ((subject) =>
+        {
+            popularity.forEach ((element) =>
+            {
+                if (element [0] == subject)
+                    element [1] += studentData.filter((x) => { return x [4] == subject }).length; 
+            })
         })
     }
 
@@ -272,13 +307,13 @@ const getSubjectInfo = (subjectCatagory, subjectChoices, subjectIndex, csvSubjec
 
     let chosenSubjectIndex = 0; 
 
-    subjectStatsCards [subjectIndex].innerHTML = `<h3>${subjectCatagory}</h3><hr>`; 
+    subjectStatsCards [subjectIndex].innerHTML = `<h3 class="subtitle">${subjectCatagory}</h3>`; 
 
     popularity.forEach((subject, index) => 
     { 
         if (subjects [subjectIndex] == subject [0])
         {
-            subjectStatsCards [subjectIndex].innerHTML += `<h3>${index + 1}. ${subject [1]} people take ${subject [0]}</h3>`; 
+            subjectStatsCards [subjectIndex].innerHTML += `<h4 class="boldH4">${index + 1}. ${subject [1]} people take ${subject [0]}</h4>`; 
             chosenSubjectIndex = index; 
         }
         else
