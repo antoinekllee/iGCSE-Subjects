@@ -69,7 +69,7 @@ button, select
     width: 20%; 
 }
 
-.verificationRow
+.verificationColumn
 {
     float: left;
     width: 25%;
@@ -89,11 +89,7 @@ button, select
 
 .card
 {
-    padding-top: 20px;
-    padding-bottom: 50px;
-
     padding: 25px 20px 50px 25px;
-
     text-align: center;
     border-radius: 15px;
     background-color: white;
@@ -109,9 +105,10 @@ button, select
 .fadeIn
 {
     display: block; 
-    animation: fadeIn 0.75s;
-    -webkit-animation: fadeIn 0.75s; 
+    animation: fadeIn 0.5s;
+    -webkit-animation: fadeIn 0.5s; 
     animation-fill-mode: forwards;
+    pointer-events: auto;
 }
 
 @keyframes fadeIn 
@@ -124,13 +121,15 @@ button, select
 {
     opacity: 1; 
     display: block; 
+    pointer-events: auto;
 }
 
 .fadeOut
 {
-    animation: fadeOut 0.75s;
-    -webkit-animation: fadeOut 0.75s; 
+    animation: fadeOut 0.5s;
+    -webkit-animation: fadeOut 0.5s; 
     animation-fill-mode: forwards;
+    pointer-events: none;
 }
 
 @keyframes fadeOut 
@@ -143,10 +142,12 @@ button, select
 {
     opacity: 0; 
     display: none; 
+    pointer-events: none;
 }
 
 .blockFadedOut
 {
     opacity: 0;
     display: block;
+    pointer-events: none;
 }

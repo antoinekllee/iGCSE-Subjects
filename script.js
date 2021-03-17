@@ -26,6 +26,8 @@ let inputStage = 0;
 let finishedInput = false; 
 let changeSubjectIndex = 0; 
 
+const FADETIME = 500; 
+
 let studentData = [] // List of all student data from CSV
 
 const inputFunctions = 
@@ -45,7 +47,7 @@ const fadeIn = (element, blockFadedOut = false) =>
     {
         element.classList.add ("fadedIn"); 
         element.classList.remove ("fadeIn"); 
-    }, 750);
+    }, FADETIME);
 }
 
 const fadeOut = (element, blockFadedOut = false) =>
@@ -57,7 +59,7 @@ const fadeOut = (element, blockFadedOut = false) =>
     {
         element.classList.add (!blockFadedOut ? "fadedOut" : "blockFadedOut"); 
         element.classList.remove ("fadeOut"); 
-    }, 750);
+    }, FADETIME); 
 }
 
 const inputSubject = (subjectCatagory, subjectChoices) => 
@@ -93,12 +95,12 @@ const submitSubject = (subjectIndex) =>
 
         if (!verificationForm.classList.contains ("fadedIn"))
         {
-            setTimeout(() => { fadeIn (verificationForm); }, 750);
+            setTimeout(() => { fadeIn (verificationForm); }, FADETIME);
             setTimeout(() => 
             {
                 verifyInput(); 
                 finishedInput = true; 
-            }, 750);
+            }, FADETIME);
         }
         else
             verifyInput (); 
@@ -107,19 +109,19 @@ const submitSubject = (subjectIndex) =>
 
 const verifyInput = () =>
 {
-    verificationForm.innerHTML = `<div class="verificationRow">
+    verificationForm.innerHTML = `<div class="verificationColumn">
                                         <h3>${subjects[0]}</h3>
                                         <button class="changeButton">Change</button>
                                     </div>
-                                    <div class="verificationRow">
+                                    <div class="verificationColumn">
                                         <h3>${subjects [1]}</h3>
                                         <button class="changeButton">Change</button>
                                     </div>
-                                    <div class="verificationRow">
+                                    <div class="verificationColumn">
                                         <h3>${subjects [2]}</h3>
                                         <button class="changeButton">Change</button>
                                     </div>
-                                    <div class="verificationRow">
+                                    <div class="verificationColumn">
                                         <h3>${subjects [3]}</h3>
                                         <button class="changeButton">Change</button>
                                     </div>
@@ -156,7 +158,7 @@ const verifySubjects = () =>
         subjectForm.classList.remove ("blockFadedOut"); 
 
         getAllData (); 
-    }, 750);
+    }, FADETIME);
 }
 
 // Async-await function to fetch data from csv
@@ -241,14 +243,14 @@ const getSimilarStudents = () =>
         similarStudentsCard.innerHTML += `<h3>${(Math.round((sameStudents.length / studentData.length) * 100) * 10) / 10}% of people chose the exact same subjects</h3>`
     }
 
-    
-    if (similarStudents.length >= 1)
+    if (similarStudents.length == 0)
+        similarStudentsCard.innerHTML += "<h3>No other students have three subjects in common with you</h4>"; 
+    else
     {
         similarStudentsCard.innerHTML += '<h3 class="subtitle">Other students who take similar subjects</h3>'; 
         similarStudents.forEach(studentInfo => { similarStudentsCard.innerHTML += studentInfo; });
+        similarStudentsCard.innerHTML += `<h3>${(Math.round((similarStudents.length / studentData.length) * 100) * 10) / 10}% of people have three subjects in common with you</h3>`
     }
-    
-    similarStudentsCard.innerHTML += `<h3>${(Math.round((similarStudents.length / studentData.length) * 100) * 10) / 10}% of people have three subjects in common with you</h3>`
 }
 
 // Gets ranking of a particular subject
@@ -313,11 +315,11 @@ const getSubjectInfo = (subjectCatagory, subjectChoices, subjectIndex, csvSubjec
     { 
         if (subjects [subjectIndex] == subject [0])
         {
-            subjectStatsCards [subjectIndex].innerHTML += `<h4 class="boldH4">${index + 1}. ${subject [1]} people take ${subject [0]}</h4>`; 
+            subjectStatsCards [subjectIndex].innerHTML += `<h4 class="boldH4">${index + 1}. ${subject [1]} ${subject [1] != 1 ? "people take" : "person takes"} ${subject [0]}</h4>`; 
             chosenSubjectIndex = index; 
         }
         else
-            subjectStatsCards [subjectIndex].innerHTML += `<h4>${index + 1}. ${subject [1]} people take ${subject [0]}</h4>`; 
+            subjectStatsCards [subjectIndex].innerHTML += `<h4>${index + 1}. ${subject [1]} ${subject [1] != 1 ? "people take" : "person takes"} ${subject [0]}</h4>`; 
     });
 
     subjectStatsCards [subjectIndex].innerHTML += `<h3>${(Math.round((popularity[chosenSubjectIndex][1] / studentData.length) * 100) * 10) / 10}% of people take ${popularity[chosenSubjectIndex][0]}</h3>`; 
